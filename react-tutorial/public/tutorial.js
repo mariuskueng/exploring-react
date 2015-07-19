@@ -1,15 +1,3 @@
-<!-- index.html -->
-<html>
-  <head>
-    <title>Hello React</title>
-    <script src="build/react.js"></script>
-    <script src="build/JSXTransformer.js"></script>
-    <script src="build/jquery.js"></script>
-    <script src="build/showdown.js"></script>
-  </head>
-  <body>
-    <div id="content"></div>
-    <script type="text/jsx">
 
     // tutorial1.js
     var CommentBox = React.createClass({
@@ -122,7 +110,3 @@
       <CommentBox url="comments.json" pollInterval={2000} />,
       document.getElementById('content')
     );
-
-    </script>
-  </body>
-</html>
