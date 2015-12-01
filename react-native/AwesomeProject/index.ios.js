@@ -11,6 +11,7 @@ var {
   ListView,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } = React;
 
@@ -82,6 +83,13 @@ var AwesomeProject = React.createClass({
           <Text style={styles.title}>{movie.title}</Text>
           <Text style={styles.year}>{movie.year}</Text>
         </View>
+        <TouchableHighlight onPress={this._onPressButton}>
+          <View style={styles.button}>
+            <Text>
+              ➡️
+            </Text>
+          </View>
+        </TouchableHighlight>
       </View>
     );
   },
@@ -114,6 +122,12 @@ var styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: '#F5FCFF',
   },
+  button: {
+    flex: 1,
+    width: 30,
+    height: 50,
+    textAlign: 'center',
+  }
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
