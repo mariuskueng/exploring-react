@@ -16,9 +16,10 @@ var {
 
 var API_KEY = '7waqfqbprs7pajbz28mqf6vz';
 var API_URL = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json';
+var API_URL_LOCAL = 'http://localhost:8888/movies.json'
 var PAGE_SIZE = 25;
 var PARAMS = '?apikey=' + API_KEY + '&page_limit=' + PAGE_SIZE;
-var REQUEST_URL = API_URL + PARAMS;
+var REQUEST_URL = API_URL_LOCAL + PARAMS;
 
 var AwesomeProject = React.createClass({
   getInitialState: function() {
