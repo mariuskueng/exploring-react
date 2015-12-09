@@ -15,7 +15,7 @@ var {
 
 var API_KEY = '750ab22aac78be1c6d4bbe584f0e3477064f646720f327c5464bc127100a1a6d';
 var API_URL = 'https://www.designernews.co/api/v1/stories';
-var API_URL_LOCAL = 'http://localhost:8888/stories.json'
+var API_URL_LOCAL = 'http://localhost:8888/stories.json';
 var PAGE = 1;
 var PARAMS = '?client_id=' + API_KEY + '&page=' + PAGE;
 var REQUEST_URL = API_URL_LOCAL + PARAMS;
@@ -73,10 +73,10 @@ var DesignerNews = React.createClass({
 
   renderStory: function(story) {
     return (
-      <View style={styles.story}>
-        <View style={styles.rightContainer}>
-          <Text style={styles.upvotes}>{story.vote_count}</Text>
-          <Text style={styles.title}>{story.title}</Text>
+      <View style={styles.row}>
+        <View style={styles.textContainer}>
+          <Text style={styles.storyUpvotes}>{story.vote_count}</Text>
+          <Text style={styles.storyTitle}>{story.title}</Text>
         </View>
         <View style={styles.separator} />
       </View>
@@ -91,27 +91,38 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
-  rightContainer: {
+  textContainer: {
     flex: 1,
+    flexDirection: 'row',
   },
   listView: {
     paddingTop: 20,
-    backgroundColor: '#F5FCFF',
   },
-  title: {
-    fontSize: 20,
+  row: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    padding: 5,
     marginBottom: 8,
-    textAlign: 'left',
   },
-  upvotes: {
-    width: 53,
+  storyUpvotes: {
+    fontWeight: 'bold',
+    fontFamily: 'Avenir Next',
+    textAlign: 'center',
+    flex: 0.2,
+    width: 30,
+  },
+  storyTitle: {
+    fontFamily: 'Avenir Next',
+    fontSize: 20,
+    textAlign: 'left',
+    flex: 1,
   },
   separator: {
     height: 1,
-    backgroundColor: '#CCCCCC',
-  },
+    backgroundColor: '#CCCCCC'
+  }
 });
 
 AppRegistry.registerComponent('DesignerNews', () => DesignerNews);
