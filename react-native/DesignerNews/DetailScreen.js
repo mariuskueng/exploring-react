@@ -18,6 +18,7 @@ var DetailScreen = React.createClass({
     return (
       <View style={styles.container}>
         <Text>{this.props.story.title}</Text>
+        <Text>{this.props.story.comment}</Text>
       </View>
     );
   }
