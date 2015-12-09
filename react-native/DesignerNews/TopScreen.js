@@ -16,6 +16,8 @@ var {
   LinkingIOS,
 } = React;
 
+var DetailScreen = require('./DetailScreen');
+
 var API_KEY = '750ab22aac78be1c6d4bbe584f0e3477064f646720f327c5464bc127100a1a6d';
 var API_URL = 'https://www.designernews.co/api/v1/stories';
 var API_URL_LOCAL = 'http://localhost:8888/stories.json';
