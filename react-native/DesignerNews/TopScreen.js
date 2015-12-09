@@ -13,6 +13,7 @@ var {
   ListView,
   TouchableHighlight,
   AlertIOS,
+  LinkingIOS,
 } = React;
 
 var API_KEY = '750ab22aac78be1c6d4bbe584f0e3477064f646720f327c5464bc127100a1a6d';
@@ -49,6 +50,16 @@ var TopScreen = React.createClass({
       .done();
   },
 
+  _openStory: function(url) {
+    LinkingIOS.canOpenURL(url, (supported) => {
+      if (!supported) {
+        AlertIOS.alert('Can\'t handle url: ' + url);
+      } else {
+        LinkingIOS.openURL(url);
+      }
+    });
+  },
+
   render: function() {
     if (!this.state.loaded) {
       return this.renderLoadingView();
@@ -75,7 +86,17 @@ var TopScreen = React.createClass({
   renderStory: function(story) {
     return (
       <View>
-        <TouchableHighlight>
+        <TouchableHighlight
+          onPress={this._openStory.bind(this,story.url)}
+          // onPress={() => this.props.navigator.push({
+          //     title: story.title,
+          //     component: DetailScreen,
+          //     backButtonTitle: 'Top',
+          //     passProps: {
+          //       story: story
+          //     },
+          //   })}
+          >
           <View style={styles.row}>
             <View style={styles.textContainer}>
               <Text style={styles.storyUpvotes}>🔼 {story.vote_count}</Text>
