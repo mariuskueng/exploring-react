@@ -12,6 +12,7 @@ var {
   View,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   AlertIOS,
   LinkingIOS,
 } = React;
@@ -52,7 +53,18 @@ var TopScreen = React.createClass({
       .done();
   },
 
-  _openStory: function(url) {
+  _openStory: function(story) {
+    this.props.navigator.push({
+      title: story.title,
+      component: DetailScreen,
+      backButtonTitle: 'Top',
+      passProps: {
+        story: story
+      },
+    });
+  },
+
+  _openStoryUrl: function(url) {
     LinkingIOS.canOpenURL(url, (supported) => {
       if (!supported) {
         AlertIOS.alert('Can\'t handle url: ' + url);
@@ -88,24 +100,18 @@ var TopScreen = React.createClass({
   renderStory: function(story) {
     return (
       <View>
-        <TouchableHighlight
-          onPress={this._openStory.bind(this,story.url)}
-          // onPress={() => this.props.navigator.push({
-          //     title: story.title,
-          //     component: DetailScreen,
-          //     backButtonTitle: 'Top',
-          //     passProps: {
-          //       story: story
-          //     },
-          //   })}
-          >
           <View style={styles.row}>
             <View style={styles.textContainer}>
               <Text style={styles.storyUpvotes}>🔼 {story.vote_count}</Text>
-              <Text style={styles.storyTitle}>{story.title}</Text>
+              <TouchableOpacity activeOpacity={1} style={styles.storyUrlButton} onPress={this._openStoryUrl.bind(this, story.url)}>
+                <Text style={styles.storyTitle}>{story.title}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={1} style={styles.storyCommentsButton} onPress={this._openStory.bind(this, story)}>
+                <Text style={styles.storyComments}>✏️ {story.comment_count}</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </TouchableHighlight>
+
       <View style={styles.separator} />
       </View>
     );
@@ -142,11 +148,20 @@ var styles = StyleSheet.create({
     paddingRight: 5,
     width: 30,
   },
+  storyUrlButton: {
+    flex: 0.9,
+  },
   storyTitle: {
     fontFamily: 'Avenir Next',
     fontSize: 20,
     textAlign: 'left',
-    flex: 1,
+  },
+  storyCommentsButton: {
+    flex: 0.2,
+  },
+  storyComments: {
+    fontFamily: 'Avenir Next',
+    paddingRight: 5,
   },
   separator: {
     height: 1,
