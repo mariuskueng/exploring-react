@@ -10,8 +10,24 @@ var {
 } = React;
 
 var DetailScreen = React.createClass({
+  getInitialState: function() {
+    return {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+    }
+  },
+
   componentDidMount: function() {
 
+  },
+
+  renderComments:function(comment) {
+    return (
+      <View style={styles.comment}>
+        <Text>{comment.body}</Text>
+      </View>
+    );
   },
 
   render: function() {
@@ -19,6 +35,10 @@ var DetailScreen = React.createClass({
       <View style={styles.container}>
         <Text>{this.props.story.title}</Text>
         <Text>{this.props.story.comment}</Text>
+        <ListView
+          dataSource={this.props.comments}
+          renderRow={this.renderComment}
+          style={styles.listView} />
       </View>
     );
   }

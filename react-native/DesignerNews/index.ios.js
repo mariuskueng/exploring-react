@@ -3,7 +3,7 @@
 var React = require('react-native');
 var {
   AppRegistry,
-  NavigatorIOS,
+  Navigator,
   StyleSheet,
 } = React;
 
@@ -12,13 +12,14 @@ var TopScreen = require('./TopScreen');
 var DesignerNews = React.createClass({
   render: function() {
     return (
-      <NavigatorIOS
-        style={styles.container}
-        initialRoute={{
-          title: 'Top Stories',
-          component: TopScreen,
-        }}
+      <Navigator
+    initialRoute={{name: 'My First Scene', index: 0}}
+    renderScene={(route, navigator) =>
+      <TopScreen
+        name={route.name}
       />
+    }
+  />
     );
   }
 });
