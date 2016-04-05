@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Navigaton } from 'react-router';
+import { Router, Route, History } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import helpers from './helpers';
 
@@ -73,19 +73,31 @@ class Inventory extends React.Component {
 /*
   StorePicker
   This will let us make <StorePicker/>
+
+  Using es5 syntax here because ReactRouter 1.x doesn't like es6
 */
 
-class StorePicker extends React.Component {
-  render() {
+var StorePicker = React.createClass({
+  mixins: [History],
+  goToStore: function(event) {
+    event.preventDefault();
+
+    // get the data from the input
+    var storeId = this.refs.storeId.value;
+
+    // transition from <StorePicker/> to <App/>
+    this.history.pushState(null, '/store/' + storeId);
+  },
+  render: function() {
     return (
-      <form className="store-selector">
+      <form className="store-selector" onSubmit={this.goToStore}>
         <h2>Please Enter A Store</h2>
         <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required/>
         <input type="submit"/>
       </form>
     )
   }
-}
+});
 
 /*
   Not Found
