@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router, Route, Navigaton } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 /*
   App
@@ -84,4 +86,26 @@ class StorePicker extends React.Component {
   }
 }
 
-ReactDOM.render(<App/>, document.querySelector('#main'));
+/*
+  Not Found
+*/
+
+class NotFound extends React.Component {
+  render() {
+    return <h1>Not Found!</h1>
+  }
+}
+
+/*
+  Routes
+*/
+
+const routes = (
+  <Router history={createBrowserHistory()}>
+    <Route path="/" component={StorePicker} />
+    <Route path="/store/:storeId" component={App} />
+    <Route path="*" component={NotFound} />
+  </Router>
+);
+
+ReactDOM.render(routes, document.querySelector('#main'));
