@@ -51,7 +51,7 @@ class App extends React.Component {
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
         </div>
-        <Order/>
+        <Order fishes={this.state.fishes} order={this.state.order} />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
       </div>
     );
@@ -157,9 +157,49 @@ class Header extends React.Component {
 */
 
 class Order extends React.Component {
-  render() {
+  renderOrder = (key) => {
+    let fish = this.props.fishes[key];
+    let count = this.props.order[key];
+
+    if (!fish) {
+      return <li key={key}>Sorry, fish no longer available!</li>
+    }
+
     return (
-      <p>Order</p>
+      <li>
+        {count}lbs
+        {fish.name}
+        <span className="price">{helpers.formatPrice(count * fish.price)}</span>
+      </li>
+    )
+  }
+
+  render() {
+    let orderIds = Object.keys(this.props.order);
+
+    let total = orderIds.reduce((prevTotal, key) => {
+      let fish = this.props.fishes[key];
+      let count = this.props.order[key];
+      let isAvailable = fish && fish.status === 'available';
+
+      if (fish && isAvailable) {
+        return prevTotal + (count * parseInt(fish.price) || 0);
+      }
+
+      return prevTotal;
+    }, 0);
+
+    return (
+      <div className="order-wrap">
+        <h2 className="order-title">Your Order</h2>
+        <ul className="order">
+          {orderIds.map(this.renderOrder)}
+          <li className="total">
+            <strong>Total:</strong>
+            {helpers.formatPrice(total)}
+          </li>
+        </ul>
+      </div>
     )
   }
 }
