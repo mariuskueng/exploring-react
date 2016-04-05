@@ -11,7 +11,7 @@ class App extends React.Component {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
-          <Header/>
+          <Header tagline="Fresh Seafood Market"/>
         </div>
         <Order/>
         <Inventory/>
@@ -28,7 +28,15 @@ class App extends React.Component {
 class Header extends React.Component {
   render() {
     return (
-      <p>Header</p>
+      <header className="top">
+        <h1>Catch
+          <span className="ofThe">
+            <span className="of">of</span>
+            <span className="the">the</span>
+          </span>
+          Day</h1>
+        <h3 className="tagline"><span>{this.props.tagline}</span></h3>
+      </header>
     )
   }
 }
