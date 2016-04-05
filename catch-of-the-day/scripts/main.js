@@ -4,6 +4,8 @@ import { Router, Route, History } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import helpers from './helpers';
 
+let history = createBrowserHistory()
+
 /*
   App
   <App/>
@@ -229,18 +231,17 @@ class Inventory extends React.Component {
   Using es5 syntax here because ReactRouter 1.x doesn't like es6
 */
 
-let StorePicker = React.createClass({
-  mixins: [History],
-  goToStore: function(event) {
+class StorePicker extends React.Component {
+  goToStore = (event) => {
     event.preventDefault();
 
     // get the data from the input
     var storeId = this.refs.storeId.value;
 
     // transition from <StorePicker/> to <App/>
-    this.history.pushState(null, '/store/' + storeId);
-  },
-  render: function() {
+    this.props.history.pushState(null, '/store/' + storeId);
+  }
+  render() {
     return (
       <form className="store-selector" onSubmit={this.goToStore}>
         <h2>Please Enter A Store</h2>
@@ -249,7 +250,7 @@ let StorePicker = React.createClass({
       </form>
     )
   }
-});
+};
 
 /*
   Not Found
@@ -266,7 +267,7 @@ class NotFound extends React.Component {
 */
 
 const routes = (
-  <Router history={createBrowserHistory()}>
+  <Router history={history}>
     <Route path="/" component={StorePicker} />
     <Route path="/store/:storeId" component={App} />
     <Route path="*" component={NotFound} />
