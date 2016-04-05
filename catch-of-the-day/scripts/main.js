@@ -20,6 +20,21 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    let localStorageRef = localStorage.getItem('store-' + this.props.
+      params.storeId);
+
+    if (localStorageRef) {
+      // update our component state to reflect what is in localStorage
+      this.setState(JSON.parse(localStorageRef));
+    }
+  }
+
+  componentWillUpdate = (nextProps, nextState) => {
+    localStorage.setItem('store-' + this.props.params.storeId,
+      JSON.stringify(nextState));
+  }
+
   addToOrder = (key) => {
     this.state.order[key] = this.state.order[key] + 1 || 1;
     this.setState({ order: this.state.order });
@@ -168,7 +183,7 @@ class Order extends React.Component {
     }
 
     return (
-      <li>
+      <li key={key}>
         {count}lbs
         {fish.name}
         <span className="price">{helpers.formatPrice(count * fish.price)}</span>
@@ -236,7 +251,7 @@ class StorePicker extends React.Component {
     event.preventDefault();
 
     // get the data from the input
-    var storeId = this.refs.storeId.value;
+    let storeId = this.refs.storeId.value;
 
     // transition from <StorePicker/> to <App/>
     this.props.history.pushState(null, '/store/' + storeId);
