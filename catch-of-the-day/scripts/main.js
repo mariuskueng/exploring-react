@@ -18,12 +18,18 @@ class App extends React.Component {
     };
   }
 
-  addFish(fish) {
+  addFish = (fish) => {
     let timestamp = (new Date()).getTime();
     // update the state object
     this.state.fishes['fish-' + timestamp] = fish;
     // set the state
     this.setState({ fishes: this.state.fishes });
+  }
+
+  loadSamples = () => {
+    this.setState({
+      fishes: require('./sample-fishes')
+    });
   }
 
   render() {
@@ -33,7 +39,7 @@ class App extends React.Component {
           <Header tagline="Fresh Seafood Market"/>
         </div>
         <Order/>
-        <Inventory addFish={this.addFish.bind(this)} />
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
       </div>
     );
   }
@@ -45,7 +51,7 @@ class App extends React.Component {
 */
 
 class AddFishForm extends React.Component {
-  createFish(event) {
+  createFish = (event) => {
     // 1. Stop the form from submitting
     event.preventDefault();
 
@@ -66,7 +72,7 @@ class AddFishForm extends React.Component {
 
   render() {
     return (
-      <form className="fish-edit" ref="fishForm" onSubmit={this.createFish.bind(this)}>
+      <form className="fish-edit" ref="fishForm" onSubmit={this.createFish}>
         <input type="text" ref="name" placeholder="Fish Name"/>
         <input type="text" ref="price" placeholder="Fish Price"/>
         <select ref="status">
@@ -127,6 +133,7 @@ class Inventory extends React.Component {
         <h2>Inventory</h2>
 
         <AddFishForm {...this.props} />
+        <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     )
   }
