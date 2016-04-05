@@ -4,7 +4,11 @@ import ReactDOM from 'react-dom';
 const StorePicker = React.createClass({
   render: () => {
     return (
-      <p>hello</p>
+      <form className="store-selector">
+        <h2>Please Enter A Store</h2>
+        <input type="text" ref="storeId"/>
+        <input type="submit"/>
+      </form>
     );
   }
 });
