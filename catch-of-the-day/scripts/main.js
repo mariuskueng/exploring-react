@@ -10,6 +10,22 @@ import helpers from './helpers';
 */
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fishes: {},
+      order: {}
+    };
+  }
+
+  addFish(fish) {
+    let timestamp = (new Date()).getTime();
+    // update the state object
+    this.state.fishes['fish-' + timestamp] = fish;
+    // set the state
+    this.setState({ fishes: this.state.fishes });
+  }
+
   render() {
     return (
       <div className="catch-of-the-day">
@@ -17,9 +33,51 @@ class App extends React.Component {
           <Header tagline="Fresh Seafood Market"/>
         </div>
         <Order/>
-        <Inventory/>
+        <Inventory addFish={this.addFish.bind(this)} />
       </div>
     );
+  }
+}
+
+/*
+  Add Fish Form
+  <AddFishForm/>
+*/
+
+class AddFishForm extends React.Component {
+  createFish(event) {
+    // 1. Stop the form from submitting
+    event.preventDefault();
+
+    // 2. Take the data from the form and create an object
+    let fish = {
+      name: this.refs.name.value,
+      price: this.refs.price.value,
+      status: this.refs.status.value,
+      desc: this.refs.desc.value,
+      image: this.refs.image.value
+    }
+
+    // 3. Add the fish to the App State
+    this.props.addFish(fish);
+    this.refs.fishForm.reset();
+
+  }
+
+  render() {
+    return (
+      <form className="fish-edit" ref="fishForm" onSubmit={this.createFish.bind(this)}>
+        <input type="text" ref="name" placeholder="Fish Name"/>
+        <input type="text" ref="price" placeholder="Fish Price"/>
+        <select ref="status">
+          <option value="available">Fresh!</option>
+          <option value="unavailable">Sold Out!</option>
+        </select>
+        <textarea type="text" ref="desc" placeholder="Desc"></textarea>
+        <input type="text" ref="image" placeholder="URL to Image"/>
+        <button type="Submit">+ Add Item</button>
+      </form>
+    )
   }
 }
 
@@ -65,7 +123,11 @@ class Order extends React.Component {
 class Inventory extends React.Component {
   render() {
     return (
-      <p>Inventory</p>
+      <div>
+        <h2>Inventory</h2>
+
+        <AddFishForm {...this.props} />
+      </div>
     )
   }
 }
@@ -77,7 +139,7 @@ class Inventory extends React.Component {
   Using es5 syntax here because ReactRouter 1.x doesn't like es6
 */
 
-var StorePicker = React.createClass({
+let StorePicker = React.createClass({
   mixins: [History],
   goToStore: function(event) {
     event.preventDefault();
