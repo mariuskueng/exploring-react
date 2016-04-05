@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Navigaton } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
+import helpers from './helpers';
 
 /*
   App
@@ -79,7 +80,7 @@ class StorePicker extends React.Component {
     return (
       <form className="store-selector">
         <h2>Please Enter A Store</h2>
-        <input type="text" ref="storeId"/>
+        <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required/>
         <input type="submit"/>
       </form>
     )
