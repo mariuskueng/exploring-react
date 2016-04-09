@@ -102,6 +102,6 @@ class App extends React.Component {
   }
 }
 
-reactMixin(App, Catalyst.LinkedStateMixin);
+reactMixin.onClass(App, Catalyst.LinkedStateMixin);
 
 export default App;
