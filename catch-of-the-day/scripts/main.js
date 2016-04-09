@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var CSSTransitionGroup = require('react-addons-css-transition-group');
 
 var ReactRouter = require('react-router');
 var Router  = ReactRouter.Router;
@@ -28,22 +29,33 @@ var App = React.createClass({
     }
   },
   componentDidMount : function() {
-    var localStorageRef = localStorage.getItem('store-' + this.props.
-      params.storeId);
+    base.syncState(this.props.params.storeId + '/fishes', {
+      context : this,
+      state : 'fishes'
+    });
 
-    if (localStorageRef) {
+    var localStorageRef = localStorage.getItem('order-' + this.props.params.storeId);
+
+    if(localStorageRef) {
       // update our component state to reflect what is in localStorage
-      this.setState(JSON.parse(localStorageRef));
+      this.setState({
+        order : JSON.parse(localStorageRef)
+      });
     }
 
   },
   componentWillUpdate : function(nextProps, nextState) {
-    localStorage.setItem('store-' + this.props.params.storeId,
-      JSON.stringify(nextState));
+    localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
   },
   addToOrder : function(key) {
     this.state.order[key] = this.state.order[key] + 1 || 1;
     this.setState({ order : this.state.order });
+  },
+  removeFromOrder : function(key){
+    delete this.state.order[key];
+    this.setState({
+      order : this.state.order
+    });
   },
   addFish : function(fish) {
     var timestamp = (new Date()).getTime();
@@ -51,6 +63,14 @@ var App = React.createClass({
     this.state.fishes['fish-' + timestamp] = fish;
     // set the state
     this.setState({ fishes : this.state.fishes });
+  },
+  removeFish : function(key) {
+    if(confirm("Are you sure you want to remove this fish?!")) {
+      this.state.fishes[key] = null;
+      this.setState({
+        fishes : this.state.fishes
+      });
+    }
   },
   loadSamples : function() {
     this.setState({
@@ -69,8 +89,8 @@ var App = React.createClass({
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order} />
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} fishes={this.state.fishes} linkState={this.linkState} />
+        <Order fishes={this.state.fishes} order={this.state.order} removeFromOrder={this.removeFromOrder} />
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} fishes={this.state.fishes} linkState={this.linkState} removeFish={this.removeFish} />
       </div>
     )
   }
@@ -172,15 +192,21 @@ var Order = React.createClass({
   renderOrder : function(key) {
     var fish = this.props.fishes[key];
     var count = this.props.order[key];
+    var removeButton = <button onClick={this.props.removeFromOrder.bind(null,key)}>&times;</button>
 
     if(!fish) {
-      return <li key={key}>Sorry, fish no longer available!</li>
+      return <li key={key}>Sorry, fish no longer available! {removeButton}</li>
     }
 
     return (
       <li key={key}>
-        {count}lbs
-        {fish.name}
+        <span>
+          <CSSTransitionGroup component="span" transitionName="count" transitionLeaveTimeout={250} transitionEnterTimeout={250} className="count">
+            <span key={count}>{count}</span>
+          </CSSTransitionGroup>
+
+          lbs {fish.name} {removeButton}
+        </span>
         <span className="price">{h.formatPrice(count * fish.price)}</span>
       </li>)
   },
@@ -202,13 +228,21 @@ var Order = React.createClass({
     return (
       <div className="order-wrap">
         <h2 className="order-title">Your Order</h2>
-        <ul className="order">
+
+        <CSSTransitionGroup
+              className="order"
+              component="ul"
+              transitionName="order"
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={500}
+            >
           {orderIds.map(this.renderOrder)}
           <li className="total">
             <strong>Total:</strong>
             {h.formatPrice(total)}
           </li>
-        </ul>
+        </CSSTransitionGroup>
+
       </div>
     )
   }
@@ -232,7 +266,7 @@ var Inventory = React.createClass({
 
         <textarea valueLink={linkState('fishes.' + key + '.desc')}></textarea>
         <input type="text" valueLink={linkState('fishes.'+ key +'.image')}/>
-        <button>Remove Fish</button>
+        <button onClick={this.props.removeFish.bind(null, key)}>Remove Fish</button>
 
       </div>
     )
