@@ -21,12 +21,12 @@ module.exports = {
     // js
     {
       test: /\.js$/,
-      loaders: ['babel'],
+      loaders: ['babel?presets[]=react,presets[]=es2015'],
       include: path.join(__dirname, 'client')
     },
     // CSS
-    { 
-      test: /\.styl$/, 
+    {
+      test: /\.styl$/,
       include: path.join(__dirname, 'client'),
       loader: 'style-loader!css-loader!stylus-loader'
     }
