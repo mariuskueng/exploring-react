@@ -7,13 +7,17 @@ const Heading = styled.h2`
   font-family: sans-serif;
 `;
 
+const List = styled.li`
+  list-style: none;
+`;
+
 const TodoList = ({ todos, toggleTodo }) => (
   <div>
     <Heading>Todos</Heading>
-    <ul>
+    <List>
       {todos.map((todo, index) =>
         <Todo key={index} todo={todo} index={index} toggleTodo={toggleTodo} />)}
-    </ul>
+    </List>
   </div>
 );
 

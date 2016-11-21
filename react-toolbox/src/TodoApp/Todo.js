@@ -2,13 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ListItem = styled.li`
-  color: black;
   text-decoration: ${props => props.completed ? 'line-through' : ''};
-  &:hover {
-    &:after {
-      content: ' ${props => props.completed ? '❎' : '✅'}'
-    }
-  }
+`;
+
+const CheckBox = styled.input`
+  display: inline-block;
+  margin-right: 10px;
 `;
 
 class Todo extends React.Component {
@@ -21,8 +20,12 @@ class Todo extends React.Component {
     return (
       <ListItem
         completed={(todo.completed ? true : false)}
-        onClick={() => this.toggleTodo(index, todo.completed)}
-      >
+        >
+        <CheckBox
+          type="checkbox"
+          checked={(todo.completed ? true : false)}
+          onChange={() => this.toggleTodo(index, todo.completed)}
+        />
         {todo.text}
       </ListItem>
     );
